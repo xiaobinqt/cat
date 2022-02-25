@@ -1,2 +1,3 @@
 # yirouter
-a high performance HTTP request router
+
+a lightweight HTTP request router
