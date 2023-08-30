@@ -1,3 +1,3 @@
-# yirouter
+# cat
 
-a lightweight HTTP request router
+A small and beautiful golang http request framework.
