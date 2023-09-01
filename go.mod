@@ -1,3 +1,3 @@
-module github.com/xiaobinqt/yirouter
+module github.com/xiaobinqt/cat
 
-go 1.16
+go 1.18
