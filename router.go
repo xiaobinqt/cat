@@ -2,6 +2,7 @@ package cat
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -38,8 +39,9 @@ func parsePattern(pattern string) []string {
 }
 
 func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
-	parts := parsePattern(pattern)
+	log.Printf("Route %s - %s", method, pattern)
 
+	parts := parsePattern(pattern)
 	debugPrintln(parts)
 
 	key := fmt.Sprintf("%s-%s", method, pattern)
