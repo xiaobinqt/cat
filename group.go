@@ -26,6 +26,10 @@ func (group *RouteGroup) Group(prefix string) *RouteGroup {
 	return newGroup
 }
 
+func (group *RouteGroup) Use(middlewares ...HandlerFunc) {
+	group.middlewares = append(group.middlewares, middlewares...)
+}
+
 func (group *RouteGroup) addRoute(method string, comp string, handler HandlerFunc) {
 	pattern := fmt.Sprintf("%s%s", group.prefix, comp)
 	group.engine.router.addRoute(method, pattern, handler)
