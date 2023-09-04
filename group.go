@@ -3,6 +3,7 @@ package cat
 import (
 	"fmt"
 	"net/http"
+	"path"
 )
 
 // Group 需要有访问 Router 的能力，为了方便，在 Group 中，保存一个指针，指向 Engine
@@ -41,4 +42,26 @@ func (group *RouteGroup) GET(pattern string, handler HandlerFunc) {
 
 func (group *RouteGroup) POST(pattern string, handler HandlerFunc) {
 	group.addRoute(http.MethodPost, pattern, handler)
+}
+
+func (group *RouteGroup) createStaticHandler(relativePath string, fs http.FileSystem) HandlerFunc {
+	absolutePath := path.Join(group.prefix, relativePath)
+	fileServer := http.StripPrefix(absolutePath, http.FileServer(fs))
+	return func(ctx *Context) {
+		file := ctx.Param("filepath")
+
+		if _, err := fs.Open(file); err != nil {
+			ctx.SetStatusCode(http.StatusNoContent)
+			return
+		}
+
+		fileServer.ServeHTTP(ctx.Writer, ctx.Req)
+	}
+}
+
+func (group *RouteGroup) Static(relativePath, root string) {
+	handler := group.createStaticHandler(relativePath, http.Dir(root))
+	urlPattern := path.Join(relativePath, "/*filename")
+
+	group.GET(urlPattern, handler)
 }

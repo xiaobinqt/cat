@@ -1,6 +1,7 @@
 package cat
 
 import (
+	"html/template"
 	"net/http"
 	"strings"
 )
@@ -13,6 +14,10 @@ type Engine struct {
 	*RouteGroup
 	router *router
 	groups []*RouteGroup // store all groups
+
+	// html
+	htmlTemplates *template.Template
+	funcMap       template.FuncMap
 }
 
 // New is the constructor of cat.Engine
@@ -23,6 +28,14 @@ func New() *Engine {
 	}
 	engine.groups = []*RouteGroup{engine.RouteGroup}
 	return engine
+}
+
+func (engine *Engine) SetFuncMap(funcMap template.FuncMap) {
+	engine.funcMap = funcMap
+}
+
+func (engine *Engine) LoadHTMLGlob(pattern string) {
+	engine.htmlTemplates = template.Must(template.New("").Funcs(engine.funcMap).ParseGlob(pattern))
 }
 
 func (engine *Engine) addRoute(method string, pattern string, handler HandlerFunc) {
@@ -55,5 +68,6 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	c := newContext(w, req)
 	c.handlers = middlewares
+	c.engine = engine
 	engine.router.handle(c)
 }
