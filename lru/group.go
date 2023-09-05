@@ -33,6 +33,10 @@ func NewGroup(name string, cacheBytes int64, getter Getter) *Group {
 		},
 	}
 
+	if _, ok := groups[name]; ok {
+		panic(fmt.Sprintf("name : %s existed", name))
+	}
+
 	groups[name] = g
 	return g
 }
