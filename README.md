@@ -5,8 +5,8 @@ A small and beautiful Go(lang) web framework . **Small in size but great in perf
 ```
                    ___   __  ____ 
                   / __) / _\(_  _) 
-                 ( (__ /    \ )(     Small in size but great in performance.
-                  \___)\_/\_/(__)    cat v1.0.0
+                 ( (__ /    \ )(     
+                  \___)\_/\_/(__)   cat is small in size but great in performance.
 ```
 
 
