@@ -16,7 +16,7 @@ func (v ByteView) String() string {
 }
 
 // returns a copy of the data as a byte slice.
-func (v ByteView) ByteSlices() []byte {
+func (v ByteView) ByteSlice() []byte {
 	return cloneBytes(v.b)
 }
 
