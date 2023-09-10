@@ -2,6 +2,7 @@ package lru
 
 import (
 	"fmt"
+	"github.com/xiaobinqt/cat/lru/pb"
 	"github.com/xiaobinqt/cat/lru/singleflight"
 	"log"
 	"sync"
@@ -57,12 +58,17 @@ func (g *Group) RegisterPeers(peers PeerPicker) {
 }
 
 func (g *Group) getFromPeer(peer PeerGetter, key string) (ByteView, error) {
-	bytes, err := peer.Get(g.name, key)
+	req := &pb.Request{
+		Group: g.name,
+		Key:   key,
+	}
+	res := &pb.Response{}
+	err := peer.Get(req, res)
 	if err != nil {
 		return ByteView{}, err
 	}
 	return ByteView{
-		b: bytes,
+		b: res.Value,
 	}, nil
 }
 
